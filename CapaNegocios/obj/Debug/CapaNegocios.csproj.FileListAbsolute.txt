@@ -16,3 +16,14 @@ C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaNegocios\obj\Debug\Capa
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaNegocios\obj\Debug\CapaNegocios.csproj.CopyComplete
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaNegocios\obj\Debug\CapaNegocios.dll
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaNegocios\obj\Debug\CapaNegocios.pdb
+C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\bin\Debug\CapaNegocios.dll
+C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\bin\Debug\CapaNegocios.pdb
+C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\bin\Debug\CapaDatos.dll
+C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\bin\Debug\CapaEntidad.dll
+C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\bin\Debug\CapaDatos.pdb
+C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\bin\Debug\CapaEntidad.pdb
+C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\obj\Debug\CapaNegocios.csproj.AssemblyReference.cache
+C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\obj\Debug\CapaNegocios.csproj.CoreCompileInputs.cache
+C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\obj\Debug\CapaNegocios.csproj.CopyComplete
+C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\obj\Debug\CapaNegocios.dll
+C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\obj\Debug\CapaNegocios.pdb

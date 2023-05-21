@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using CapaNegocios;
+using System.Windows.Forms;
 
 namespace ProyectoAdministradores
 {
@@ -7,6 +8,13 @@ namespace ProyectoAdministradores
         public ControlProductos()
         {
             InitializeComponent();
+        }
+
+        CapaNegocioCrudProductos CN_Productos = new CapaNegocioCrudProductos();
+        private void ControlProductos_Load(object sender, System.EventArgs e)
+        {
+            CN_Productos.llenarGrid(ref dgvProductos);
+            
         }
     }
 }

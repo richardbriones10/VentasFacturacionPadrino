@@ -228,6 +228,7 @@
             this.btnControlProductos.Text = "Productos";
             this.btnControlProductos.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnControlProductos.UseVisualStyleBackColor = true;
+            this.btnControlProductos.Click += new System.EventHandler(this.btnControlProductos_Click);
             // 
             // btnControlClientes
             // 

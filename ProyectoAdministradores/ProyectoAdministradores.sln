@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapaNegocios", "..\CapaNego
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapaDatos", "..\CapaDatos\CapaDatos.csproj", "{D1E7925D-5C6D-4F9C-9ECF-1E50A8FD8214}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapaEntidad", "..\CapaEntidad\CapaEntidad.csproj", "{EEE74982-6284-4B57-9DD7-3B6A1E1C2AA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{D1E7925D-5C6D-4F9C-9ECF-1E50A8FD8214}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1E7925D-5C6D-4F9C-9ECF-1E50A8FD8214}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1E7925D-5C6D-4F9C-9ECF-1E50A8FD8214}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEE74982-6284-4B57-9DD7-3B6A1E1C2AA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEE74982-6284-4B57-9DD7-3B6A1E1C2AA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEE74982-6284-4B57-9DD7-3B6A1E1C2AA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEE74982-6284-4B57-9DD7-3B6A1E1C2AA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
