@@ -67,9 +67,17 @@ namespace ProyectoAdministradores
             openChildFormInPanel(new Dashboard());
         }
 
+        private void btnRegistrosAlquileres_Click(object sender, EventArgs e)
+        {
+        }
         private void btnControlProductos_Click(object sender, EventArgs e)
         {
             openChildFormInPanel(new ControlProductos());
+        }
+
+        private void btnFacturacionModulos_Click(object sender, EventArgs e)
+        {
+            openChildFormInPanel(new FacturacionModulos()); 
         }
     }
 }

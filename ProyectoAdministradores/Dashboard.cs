@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -19,7 +18,7 @@ namespace ProyectoAdministradores
 
         private void Dashboard_Load(object sender, System.EventArgs e)
         {
-          
+
 
             GraficoProductosMasVendido();
             CargarDatosVentasTotalMes();
@@ -46,7 +45,7 @@ namespace ProyectoAdministradores
 
             if (ds.Rows.Count > 0)
             {
-             lblNumCustomers.Text = ds.Rows[0]["TotalClientes"].ToString();
+                lblNumCustomers.Text = ds.Rows[0]["TotalClientes"].ToString();
             }
             Conexion.Close();
         }
@@ -208,7 +207,7 @@ namespace ProyectoAdministradores
 
             // Mostrar el gráfico
 
-            Conexion.Close() ;
+            Conexion.Close();
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)

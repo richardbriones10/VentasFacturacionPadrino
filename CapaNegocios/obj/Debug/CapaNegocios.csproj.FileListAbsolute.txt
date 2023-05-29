@@ -27,3 +27,5 @@ C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\obj\Debug\CapaNegocios.cspr
 C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\obj\Debug\CapaNegocios.csproj.CopyComplete
 C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\obj\Debug\CapaNegocios.dll
 C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\obj\Debug\CapaNegocios.pdb
+C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaNegocios\bin\Debug\CapaEntidad.dll
+C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaNegocios\bin\Debug\CapaEntidad.pdb

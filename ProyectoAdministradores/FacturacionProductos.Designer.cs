@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBoxProductos = new System.Windows.Forms.GroupBox();
+            this.textBoxStock = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.panelTotalProd = new System.Windows.Forms.Panel();
             this.labelTotal = new System.Windows.Forms.Label();
             this.labelTotalProductos = new System.Windows.Forms.Label();
@@ -61,7 +63,6 @@
             this.panelContenedorNoFactura = new System.Windows.Forms.Panel();
             this.buttonImprimirFactura = new System.Windows.Forms.Button();
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.groupBoxProductos.SuspendLayout();
             this.panelTotalProd.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -74,6 +75,7 @@
             // 
             // groupBoxProductos
             // 
+            this.groupBoxProductos.Controls.Add(this.textBoxStock);
             this.groupBoxProductos.Controls.Add(this.label6);
             this.groupBoxProductos.Controls.Add(this.panelTotalProd);
             this.groupBoxProductos.Controls.Add(this.buttonBorrarFactura);
@@ -99,12 +101,30 @@
             this.groupBoxProductos.TabStop = false;
             this.groupBoxProductos.Text = "Facturacion";
             // 
+            // textBoxStock
+            // 
+            this.textBoxStock.Font = new System.Drawing.Font("Nirmala UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxStock.Location = new System.Drawing.Point(426, 143);
+            this.textBoxStock.Name = "textBoxStock";
+            this.textBoxStock.ReadOnly = true;
+            this.textBoxStock.Size = new System.Drawing.Size(93, 22);
+            this.textBoxStock.TabIndex = 27;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(354, 143);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(38, 13);
+            this.label6.TabIndex = 26;
+            this.label6.Text = "Stock:";
+            // 
             // panelTotalProd
             // 
             this.panelTotalProd.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelTotalProd.Controls.Add(this.labelTotal);
             this.panelTotalProd.Controls.Add(this.labelTotalProductos);
-            this.panelTotalProd.Location = new System.Drawing.Point(328, 165);
+            this.panelTotalProd.Location = new System.Drawing.Point(328, 174);
             this.panelTotalProd.Name = "panelTotalProd";
             this.panelTotalProd.Size = new System.Drawing.Size(191, 35);
             this.panelTotalProd.TabIndex = 25;
@@ -137,7 +157,7 @@
             this.buttonBorrarFactura.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.buttonBorrarFactura.Image = global::ProyectoAdministradores.Properties.Resources.icons8_void_50;
             this.buttonBorrarFactura.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonBorrarFactura.Location = new System.Drawing.Point(76, 177);
+            this.buttonBorrarFactura.Location = new System.Drawing.Point(74, 183);
             this.buttonBorrarFactura.Name = "buttonBorrarFactura";
             this.buttonBorrarFactura.Size = new System.Drawing.Size(222, 61);
             this.buttonBorrarFactura.TabIndex = 25;
@@ -151,7 +171,7 @@
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.labelMontoTotal);
-            this.panel1.Location = new System.Drawing.Point(328, 206);
+            this.panel1.Location = new System.Drawing.Point(328, 215);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(191, 32);
             this.panel1.TabIndex = 24;
@@ -326,11 +346,12 @@
             // 
             // textBoxNombreCliente
             // 
-            this.textBoxNombreCliente.Location = new System.Drawing.Point(62, 21);
-            this.textBoxNombreCliente.Multiline = true;
+            this.textBoxNombreCliente.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.textBoxNombreCliente.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBoxNombreCliente.Location = new System.Drawing.Point(71, 22);
             this.textBoxNombreCliente.Name = "textBoxNombreCliente";
-            this.textBoxNombreCliente.Size = new System.Drawing.Size(225, 23);
-            this.textBoxNombreCliente.TabIndex = 12;
+            this.textBoxNombreCliente.Size = new System.Drawing.Size(220, 22);
+            this.textBoxNombreCliente.TabIndex = 28;
             // 
             // label2
             // 
@@ -446,15 +467,6 @@
             this.pictureBoxLogo.TabIndex = 19;
             this.pictureBoxLogo.TabStop = false;
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(354, 143);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(38, 13);
-            this.label6.TabIndex = 26;
-            this.label6.Text = "Stock:";
-            // 
             // FacturacionProductos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -508,7 +520,6 @@
         private System.Windows.Forms.Label labelIdProducto;
         private System.Windows.Forms.Label labelNombreProducto;
         private System.Windows.Forms.Button buttonImprimirFactura;
-        private System.Windows.Forms.TextBox textBoxNombreCliente;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label4;
@@ -526,5 +537,7 @@
         private System.Windows.Forms.Label labelTotal;
         private System.Windows.Forms.Label labelTotalProductos;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox textBoxStock;
+        public System.Windows.Forms.TextBox textBoxNombreCliente;
     }
 }

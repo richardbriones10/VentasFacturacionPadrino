@@ -148,6 +148,9 @@
     <EmbeddedResource Include="Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FacturacionModulos.resx">
+      <DependentUpon>FacturacionModulos.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FacturacionProductos.resx">
       <DependentUpon>FacturacionProductos.cs</DependentUpon>
     </EmbeddedResource>
