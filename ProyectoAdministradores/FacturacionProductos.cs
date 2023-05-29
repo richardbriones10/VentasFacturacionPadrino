@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ProyectoAdministradores
@@ -12,16 +14,26 @@ namespace ProyectoAdministradores
     {
         //Conexion con la base de datos
         private SqlConnection Conexion = new SqlConnection("Server=RICHARD-PC;DataBase=VentasFacturacionPadrino;Integrated Security=true");
-        DataTable datos = new DataTable();
         SqlCommand comando = new SqlCommand();
+        public DataTable datos = new DataTable();
         private DataTable dt;
         CapaNegociosFacturacionProductos objetoCN = new CapaNegociosFacturacionProductos();
+
+
+      
 
         public FacturacionProductos()
         {
             InitializeComponent();
             SiguienteIdFactura();
+            AutoCompletarCliente();
             AutoCompletarProducto();
+           
+        }
+
+
+        private void textBoxProducto_TextChanged(object sender, EventArgs e)
+        {
 
         }
 
@@ -30,7 +42,7 @@ namespace ProyectoAdministradores
         private void FacturacionProductos_Load(object sender, EventArgs e)
         {
             AutoCompletarProducto();
-
+            AutoCompletarCliente();
 
             dt = new DataTable();
             dt.Columns.Add("ID");
@@ -102,18 +114,37 @@ namespace ProyectoAdministradores
             cmd.CommandType = CommandType.Text;
             SqlDataAdapter adapter = new SqlDataAdapter(cmd);
 
+            DataTable datosProducto = new DataTable(); // DataTable para los datos del producto
+
+            adapter.Fill(datosProducto);
+
+            for (int i = 0; i < datosProducto.Rows.Count; i++)
+            {
+                lista.Add(datosProducto.Rows[i]["Nombre"].ToString());
+                lista3.Add(datosProducto.Rows[i]["Precio"].ToString());
+                lista2.Add(datosProducto.Rows[i]["Descripcion"].ToString());
+            }
+            Conexion.Close();
+            textBoxProducto.AutoCompleteCustomSource = lista;
+            textBoxDescripcionProducto.AutoCompleteCustomSource = lista2;
+            textBoxPrecioUnitario.AutoCompleteCustomSource = lista3;
+        }
+
+        private void AutoCompletarCliente()
+        {
+            AutoCompleteStringCollection lista = new AutoCompleteStringCollection();
+            SqlCommand cmd = new SqlCommand("SELECT * FROM CLIENTE", Conexion);
+            cmd.CommandType = CommandType.Text;
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
             adapter.Fill(datos);
 
             for (int i = 0; i < datos.Rows.Count; i++)
             {
                 lista.Add(datos.Rows[i]["Nombre"].ToString());
-                lista3.Add(datos.Rows[i]["Precio"].ToString());
-                lista2.Add(datos.Rows[i]["Descripcion"].ToString());
             }
-            textBoxProducto.AutoCompleteCustomSource = lista;
-            textBoxDescripcionProducto.AutoCompleteCustomSource = lista2;
-            textBoxPrecioUnitario.AutoCompleteCustomSource = lista3;
+            textBoxNombreCliente.AutoCompleteCustomSource = lista;
         }
+
 
         private void groupBoxCarrito_Enter(object sender, EventArgs e)
         {
@@ -164,12 +195,27 @@ namespace ProyectoAdministradores
                         textBoxDescripcionProducto.Text = Convert.ToString(reader["Descripcion"]);
                         textBoxPrecioUnitario.Text = Convert.ToString(reader["Precio"]);
                         textBoxIdProducto.Text = Convert.ToString(reader["IdProducto"]);
+                        textBoxStock.Text = Convert.ToString(reader["StockActual"]);
 
+                    }
+
+                    if (int.Parse(textBoxStock.Text) == 1)
+                    {
+                        textBoxCantidadProducto.ReadOnly = true;
+                        textBoxCantidadProducto.Text = "1";
+                    }
+                    else
+                    {
+                        textBoxCantidadProducto.ReadOnly = false;
                     }
 
                 }
             }
         }
+
+
+
+
 
         //Agregamos un nuevo producto al carrito
         List<float> ListaSumaSubtotalVenta = new List<float>();
@@ -177,9 +223,24 @@ namespace ProyectoAdministradores
 
         private void buttonAgregarCarrito_Click(object sender, EventArgs e)
         {
+
+            if ((int.Parse(textBoxCantidadProducto.Text) <= int.Parse(textBoxStock.Text)) && int.Parse(textBoxCantidadProducto.Text) > 0)
+            {
+                AgregarAlCarrito();
+            }
+            else
+            {
+                MessageBox.Show("La cantidad agregada supera el stock actual o no puede ser 0 o nulo");
+            }
+
+
+
+        }
+
+        private void AgregarAlCarrito()
+        {
             int cantidad;
             float precioUnitario;
-
             DataRow row = dt.NewRow();
             row["ID"] = textBoxIdProducto.Text;
             row["Nombre"] = textBoxProducto.Text;
@@ -198,11 +259,17 @@ namespace ProyectoAdministradores
             //row["Subtotal"] = int.Parse(textBoxCantidadProducto.Text) * int.Parse(textBoxPrecioUnitario.Text);
             dt.Rows.Add(row);
 
+            int cantidad_agregada = int.Parse(textBoxCantidadProducto.Text);
+
+            textBoxStock.Text = (int.Parse(textBoxStock.Text) - cantidad_agregada).ToString();
+
             ListaSumaSubtotalVenta.Add(int.Parse(textBoxCantidadProducto.Text) * float.Parse(textBoxPrecioUnitario.Text));
             labelMontoTotal.Text = ListaSumaSubtotalVenta.Sum().ToString();
             TotalProductos += 1;
             labelTotalProductos.Text = TotalProductos.ToString();
         }
+
+
         void LlenarCarritoColumnas()
         {
             dt = new DataTable();
@@ -218,7 +285,8 @@ namespace ProyectoAdministradores
         {
             dgv_carrito.DataSource = null;
             LlenarCarritoColumnas();
-
+            LimpiarTxt();
+            labelCantidad.Text = "0";
             labelMontoTotal.Text = "0";
         }
 
@@ -274,6 +342,10 @@ namespace ProyectoAdministradores
             TotalProductos = 0;
             labelTotalProductos.Text = "0";
             labelMontoTotal.Text = "0";
+            textBoxStock.Clear();
+
         }
+
+        
     }
 }
