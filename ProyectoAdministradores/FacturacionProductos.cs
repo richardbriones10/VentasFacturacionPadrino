@@ -170,8 +170,12 @@ namespace ProyectoAdministradores
             textBoxProducto.Clear();
             textBoxCantidadProducto.Clear();
             textBoxDescripcionProducto.Clear();
+            textBoxStock.Clear();
             textBoxPrecioUnitario.Clear();
-            textBoxNombreCliente.Clear();
+            if (textBoxNombreCliente.Text.Length <= 0 )
+            {
+                textBoxNombreCliente.Clear();
+            }
         }
 
         //Autocompletar Producto con la informacion del nombre mediante la tecla Enter
@@ -286,8 +290,6 @@ namespace ProyectoAdministradores
             dgv_carrito.DataSource = null;
             LlenarCarritoColumnas();
             LimpiarTxt();
-            labelCantidad.Text = "0";
-            labelMontoTotal.Text = "0";
         }
 
         private void buttonQuitarCarrito_Click(object sender, EventArgs e)
@@ -306,6 +308,8 @@ namespace ProyectoAdministradores
                     labelTotalProductos.Text = TotalProductos.ToString();
                 }
             }
+
+          
         }
 
         private void buttonImprimirFactura_Click(object sender, EventArgs e)
@@ -340,8 +344,6 @@ namespace ProyectoAdministradores
             ListaSumaSubtotalVenta.Clear();
             SiguienteIdFactura();
             TotalProductos = 0;
-            labelTotalProductos.Text = "0";
-            labelMontoTotal.Text = "0";
             textBoxStock.Clear();
 
         }

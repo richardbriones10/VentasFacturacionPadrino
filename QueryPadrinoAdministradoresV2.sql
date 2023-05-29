@@ -168,6 +168,56 @@ INSERT INTO Modulo (CapacidadModulo, StockModulo, Precio, Estado) VALUES (50, 0,
 INSERT INTO Modulo (CapacidadModulo, StockModulo, Precio, Estado) VALUES (50, 0, 70.00, 1);
 
 
+CREATE TABLE ProveedorModulo
+(
+    IdProveedorModulo INT PRIMARY KEY IDENTITY NOT NULL,
+    ProveedorId INT NOT NULL,
+    ModuloId INT NOT NULL,
+    CONSTRAINT FK_ProveedorModulo_Proveedor FOREIGN KEY (ProveedorId) REFERENCES Proveedor(IdProveedor),
+    CONSTRAINT FK_ProveedorModulo_Modulo FOREIGN KEY (ModuloId) REFERENCES Modulo(IdModulo)
+)
+
+--A que modulo le corresponde cada proveedor
+SELECT P.Empresa AS NombreProveedor, M.IdModulo AS NumeroModulo
+FROM ProveedorModulo PM
+JOIN Proveedor P ON PM.ProveedorId = P.IdProveedor
+JOIN Modulo M ON PM.ModuloId = M.IdModulo
+--cuantos modulos tiene cada proveedor
+SELECT P.IdProveedor, P.Empresa, COUNT(*) AS TotalModulos
+FROM Proveedor P
+JOIN ProveedorModulo PM ON P.IdProveedor = PM.ProveedorId
+GROUP BY P.IdProveedor, P.Empresa
+
+
+SELECT *
+FROM Factura_Alquiler
+WHERE FechaExpiracion >= GETDATE()
+ORDER BY FechaExpiracion ASC
+
+
+--borrar todo junto a los identity
+Delete from ProveedorModulo
+DBCC CHECKIDENT ('ProveedorModulo', RESEED, 1);
+
+
+INSERT INTO ProveedorModulo(ProveedorId,ModuloId)
+VALUES
+(1,1),
+(2,2),
+(3,3),
+(4,4),
+(5,5),
+(6,6),
+(7,7),
+(8,8),
+(9,9),
+(10,10),
+(1,11),
+(2,12),
+(3,13),
+(4,14),
+(5,15);
+
 
 
 Create Table Factura_Alquiler
@@ -185,38 +235,6 @@ Create Table Factura_Alquiler
 SELECT * FROM Proveedor
 SELECT * FROM Modulo
 SELECT * FROM Factura_Alquiler
-
----Modulos que tiene cada proveedor
-SELECT p.Empresa AS Proveedor, COUNT(fa.Modulo_FK_Codigo) AS NumModulos
-FROM Proveedor p
-INNER JOIN Factura_Alquiler fa ON p.IdProveedor = fa.Proveedor_FK_Codigo
-GROUP BY p.Empresa order by NumModulos asc
-
---Modulos que pertenecen a cada proveedor
-SELECT p.Empresa AS Proveedor, m.IdModulo AS Modulo
-FROM Factura_Alquiler fa
-INNER JOIN Proveedor p ON fa.Proveedor_FK_Codigo = p.IdProveedor
-INNER JOIN Modulo m ON fa.Modulo_FK_Codigo = m.IdModulo;
-
---Seleccionar todas las facturas de alquiler junto con su proveedor correspondiente:
-SELECT fa.CodigoFacturaAlquiler, fa.FechaCancelacion, fa.FechaExpiracion, fa.Mora, fa.MontoTotal, pr.Empresa AS Proveedor
-FROM Factura_Alquiler fa JOIN Proveedor pr ON fa.Proveedor_FK_Codigo = pr.IdProveedor;
---Seleccionar todas las facturas de alquiler junto con el módulo correspondiente:
-SELECT fa.CodigoFacturaAlquiler, fa.FechaCancelacion, fa.FechaExpiracion, fa.Mora, fa.MontoTotal, mo.CapacidadModulo AS Capacidad,mo.IdModulo AS NumeroDeModulo, mo.Precio AS PrecioModulo FROM Factura_Alquiler fa JOIN Modulo mo ON fa.Modulo_FK_Codigo = mo.IdModulo;
---Seleccionar todas las facturas de alquiler junto con la cantidad de módulos que se alquilaron:
-SELECT fa.CodigoFacturaAlquiler, fa.FechaCancelacion, fa.FechaExpiracion, fa.Mora, fa.MontoTotal, COUNT(mo.IdModulo) AS CantidadModulos
-FROM Factura_Alquiler fa JOIN Modulo mo ON fa.Modulo_FK_Codigo = mo.IdModulo
-GROUP BY fa.CodigoFacturaAlquiler, fa.FechaCancelacion, fa.FechaExpiracion, fa.Mora, fa.MontoTotal;
---Seleccionar todas las facturas de alquiler junto con la cantidad de días que se alquiló el módulo:
-SELECT fa.CodigoFacturaAlquiler, fa.FechaCancelacion, fa.FechaExpiracion, fa.Mora, fa.MontoTotal, DATEDIFF(day, fa.FechaCancelacion, fa.FechaExpiracion) AS DiasAlquiler
-FROM Factura_Alquiler fa;
---Seleccionar todas las facturas de alquiler junto con la información de proveedor y módulo, ordenado por fecha de cancelación en orden ascendente:
-SELECT fa.CodigoFacturaAlquiler, fa.FechaCancelacion, fa.FechaExpiracion, fa.Mora, fa.MontoTotal, pr.Empresa AS Proveedor, mo.CapacidadModulo, mo.Precio
-FROM Factura_Alquiler fa
-JOIN Proveedor pr ON fa.Proveedor_FK_Codigo = pr.IdProveedor
-JOIN Modulo mo ON fa.Modulo_FK_Codigo = mo.IdModulo
-ORDER BY fa.FechaCancelacion ASC;
-
 
 
 INSERT INTO Factura_Alquiler (FechaCancelacion, FechaExpiracion, Proveedor_FK_Codigo, Modulo_FK_Codigo, MontoTotal)
@@ -236,7 +254,31 @@ VALUES
 (GETDATE(), DATEADD(month, 1, GETDATE()),3,13,70),
 (GETDATE(), DATEADD(month, 1, GETDATE()),4,14,70),
 (GETDATE(), DATEADD(month, 1, GETDATE()),5,15,70);
+DELETE FROM Factura_Alquiler
+DBCC CHECKIDENT ('Factura_Alquiler', RESEED, 1);
 
+
+
+INSERT INTO Factura_Alquiler (FechaCancelacion, FechaExpiracion, Proveedor_FK_Codigo, Modulo_FK_Codigo, MontoTotal)
+VALUES
+(GETDATE(), DATEADD(month, 1, GETDATE()),1,2,50)
+delete from Factura_Alquiler where CodigoFacturaAlquiler=16
+
+GO
+Create Procedure InsertarFacturaModulos
+@IdProveedor int,
+@IdModulo int,
+@MontoModulo int
+AS
+BEGIN
+INSERT INTO Factura_Alquiler (FechaCancelacion, FechaExpiracion, Mora, MontoTotal, Proveedor_FK_Codigo, Modulo_FK_Codigo)
+VALUES (GETDATE(), DATEADD(month, 1, GETDATE()), 0,@MontoModulo , @IdProveedor, @IdModulo)
+UPDATE ProveedorModulo
+SET ProveedorId = @IdProveedor
+WHERE ModuloId = @IdModulo
+END
+
+execute InsertarFacturaModulos 2,1,50
 
 
 CREATE TABLE CategoriaProducto
@@ -340,6 +382,14 @@ VALUES
 ('Cajeta de Leche', 20, 15.99, 'Cajeta de leche de cabra con nueces', 10, 8),
 ('Mazapán ', 200, 5.99, 'Mazapán con cacahuate natural', 10, 8),
 ('Gomitas', 150, 6.99, 'Gomitas de chamoy con chile picante', 10, 8);
+
+
+go
+CREATE PROCEDURE SP_Load_Productos
+as
+begin
+Select Nombre, StockActual, Precio, Descripcion From Producto where Estado = 1
+end
 
 CREATE TABLE RegistroProducto
 (

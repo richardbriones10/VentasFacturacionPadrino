@@ -73,3 +73,4 @@ C:\Users\richa\Source\Repos\VentasFacturacionPadrino\ProyectoAdministradores\obj
 C:\Users\richa\source\repos\VentasFacturacionPadrino\ProyectoAdministradores\bin\Debug\CapaEntidad.dll
 C:\Users\richa\source\repos\VentasFacturacionPadrino\ProyectoAdministradores\bin\Debug\CapaEntidad.pdb
 C:\Users\richa\source\repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.ControlProductos.resources
+C:\Users\richa\Source\Repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.FacturacionModulos.resources

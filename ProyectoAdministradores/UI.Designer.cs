@@ -272,6 +272,7 @@
             this.btnFacturacionModulos.Text = "Modulos";
             this.btnFacturacionModulos.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnFacturacionModulos.UseVisualStyleBackColor = true;
+            this.btnFacturacionModulos.Click += new System.EventHandler(this.btnFacturacionModulos_Click);
             // 
             // btnFacturacionProductos
             // 

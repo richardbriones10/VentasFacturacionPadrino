@@ -75,6 +75,9 @@ namespace ProyectoAdministradores
             openChildFormInPanel(new ControlProductos());
         }
 
-     
+        private void btnFacturacionModulos_Click(object sender, EventArgs e)
+        {
+            openChildFormInPanel(new FacturacionModulos()); 
+        }
     }
 }

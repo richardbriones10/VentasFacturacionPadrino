@@ -10,3 +10,6 @@ C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaDatos\obj\Debug\CapaDat
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaDatos\obj\Debug\CapaDatos.csproj.CoreCompileInputs.cache
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaDatos\obj\Debug\CapaDatos.dll
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaDatos\obj\Debug\CapaDatos.pdb
+C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaDatos\bin\Debug\CapaEntidad.dll
+C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaDatos\bin\Debug\CapaEntidad.pdb
+C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaDatos\obj\Debug\CapaDatos.csproj.CopyComplete
