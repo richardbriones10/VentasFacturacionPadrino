@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CapaDatos;
+using CapaEntidad;
+
 namespace CapaNegocios
 {
     public  class CapaNegocioCrudProductos
@@ -18,6 +20,20 @@ namespace CapaNegocios
 
             dgv.DataSource = dv.Table.DefaultView;
             
+        }
+
+        public bool validarDatos(Producto producto)
+        {
+            bool validado = true;
+
+            if (producto.Nombre == string.Empty)
+            {
+                MessageBox.Show("El nombre es obligatorio");
+                validado = false;
+            }
+            
+
+            return validado;
         }
 
     }

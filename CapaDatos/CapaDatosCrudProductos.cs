@@ -48,5 +48,14 @@ namespace CapaDatos
             return dvProducto;
         }
         
+
+        public void InsertProduct(Producto producto)
+        {
+
+            using(conexion.AbrirConexion())
+            {
+
+            }
+        }
     }
 }
