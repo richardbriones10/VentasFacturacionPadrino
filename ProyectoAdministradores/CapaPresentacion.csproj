@@ -83,11 +83,11 @@
     <Compile Include="ControlProveedores.Designer.cs">
       <DependentUpon>ControlProveedores.cs</DependentUpon>
     </Compile>
-    <Compile Include="CreateProducto.cs">
+    <Compile Include="createProducto.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CreateProducto.Designer.cs">
-      <DependentUpon>CreateProducto.cs</DependentUpon>
+    <Compile Include="createProducto.Designer.cs">
+      <DependentUpon>createProducto.cs</DependentUpon>
     </Compile>
     <Compile Include="Dashboard.cs">
       <SubType>Form</SubType>
@@ -143,7 +143,7 @@
       <DependentUpon>ControlProductos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CreateProducto.resx">
-      <DependentUpon>CreateProducto.cs</DependentUpon>
+      <DependentUpon>createProducto.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>
