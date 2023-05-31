@@ -70,6 +70,7 @@ C:\Users\richa\Source\Repos\VentasFacturacionPadrino\ProyectoAdministradores\obj
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\CapaPresentacion.csproj.CopyComplete
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.exe
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.pdb
+<<<<<<< HEAD
 C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\ProyectoAdministradores\bin\Debug\ProyectoAdministradores.exe.config
 C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\ProyectoAdministradores\bin\Debug\ProyectoAdministradores.exe
 C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\ProyectoAdministradores\bin\Debug\ProyectoAdministradores.pdb
@@ -111,3 +112,9 @@ C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\V
 C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\CapaPresentacion.csproj.CopyComplete
 C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.exe
 C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.pdb
+=======
+C:\Users\richa\source\repos\VentasFacturacionPadrino\ProyectoAdministradores\bin\Debug\CapaEntidad.dll
+C:\Users\richa\source\repos\VentasFacturacionPadrino\ProyectoAdministradores\bin\Debug\CapaEntidad.pdb
+C:\Users\richa\source\repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.ControlProductos.resources
+C:\Users\richa\Source\Repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.FacturacionModulos.resources
+>>>>>>> 33aab6c4224288cc7e991493f8e902e7a8fdf8d1

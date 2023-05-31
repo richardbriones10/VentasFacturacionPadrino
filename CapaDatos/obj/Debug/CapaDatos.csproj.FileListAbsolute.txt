@@ -10,9 +10,15 @@ C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaDatos\obj\Debug\CapaDat
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaDatos\obj\Debug\CapaDatos.csproj.CoreCompileInputs.cache
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaDatos\obj\Debug\CapaDatos.dll
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaDatos\obj\Debug\CapaDatos.pdb
+<<<<<<< HEAD
 C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaDatos\bin\Debug\CapaDatos.dll
 C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaDatos\bin\Debug\CapaDatos.pdb
 C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaDatos\obj\Debug\CapaDatos.csproj.AssemblyReference.cache
 C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaDatos\obj\Debug\CapaDatos.csproj.CoreCompileInputs.cache
 C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaDatos\obj\Debug\CapaDatos.dll
 C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaDatos\obj\Debug\CapaDatos.pdb
+=======
+C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaDatos\bin\Debug\CapaEntidad.dll
+C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaDatos\bin\Debug\CapaEntidad.pdb
+C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaDatos\obj\Debug\CapaDatos.csproj.CopyComplete
+>>>>>>> 33aab6c4224288cc7e991493f8e902e7a8fdf8d1
