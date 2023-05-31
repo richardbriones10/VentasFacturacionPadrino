@@ -10,13 +10,13 @@ namespace CapaNegocios
 {
     public  class CapaNegocioCrudProductos
     {
-        CapaDatosCrudProductos CD_Productos = new CapaDatosCrudProductos();
+        //CapaDatosCrudProductos CD_Productos = new CapaDatosCrudProductos();
 
         public void llenarGrid(ref DataGridView dgv)
         {
-            DataView dv = CD_Productos.GetProductos();
+          //  DataView dv = CD_Productos.GetProductos();
 
-            dgv.DataSource = dv.Table.DefaultView;
+            //dgv.DataSource = dv.Table.DefaultView;
             
         }
 

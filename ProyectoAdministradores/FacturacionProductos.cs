@@ -11,7 +11,7 @@ namespace ProyectoAdministradores
     public partial class FacturacionProductos : Form
     {
         //Conexion con la base de datos
-        private SqlConnection Conexion = new SqlConnection("Server=RICHARD-PC;DataBase=VentasFacturacionPadrino;Integrated Security=true");
+        private SqlConnection Conexion = new SqlConnection("Server=MARVIN;DataBase=VentasFacturacionPadrino;Integrated Security=true");
         DataTable datos = new DataTable();
         SqlCommand comando = new SqlCommand();
         private DataTable dt;
@@ -149,7 +149,7 @@ namespace ProyectoAdministradores
             if (e.KeyCode == Keys.Enter)
             {
                 // Aquí llamas al método que ejecuta la consulta a la base de datos
-                string connstring = "Server=RICHARD-PC;DataBase= VentasFacturacionPadrino;Integrated Security=true";
+                string connstring = "Server=MARVIN;DataBase= VentasFacturacionPadrino;Integrated Security=true";
                 using (SqlConnection cn = new SqlConnection(connstring))
                 {
                     cn.Open();
