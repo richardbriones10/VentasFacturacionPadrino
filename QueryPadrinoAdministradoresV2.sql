@@ -2410,4 +2410,119 @@ return (SELECT COUNT(*) AS Cantidad_Proveedores_Activos FROM Proveedor WHERE Est
 end
 
 
+/*fernando vistas*/
+-- View Obtener la cantidad de productos y el nombre del módulo al que están asignados
+Create view ProductosXModulos
+as
+SELECT CantidadProductos, m.IdModulo as Modulo, p.Nombre as Producto
+FROM Modulo_Producto mp
+JOIN Modulo m ON mp.Modulo_FK_Codigo = m.IdModulo
+JOIN Producto p ON mp.Producto_FK_Codigo = p.IdProducto
 
+--Obtener la cantidad de productos asignados a cada módulo:
+create View Get_CantidadProductosPorModulo
+as
+SELECT Modulo_FK_Codigo, SUM(CantidadProductos) as TotalProductos
+FROM Modulo_Producto
+GROUP BY Modulo_FK_Codigo
+
+--Obtener el nombre del producto y la cantidad de productos asignados a cada módulo:
+Create View Get_nombreProducto_CantidadProductoPorModulo
+as
+SELECT p.Nombre as Producto, mp.CantidadProductos, m.IdModulo as Modulo
+FROM Modulo_Producto mp
+JOIN Modulo m ON mp.Modulo_FK_Codigo = m.IdModulo
+JOIN Producto p ON mp.Producto_FK_Codigo = p.IdProducto
+
+--Obtener la cantidad total de productos asignados a todos los módulos:
+
+create view get_CantidadTotalProductosPorModulo
+as
+SELECT SUM(CantidadProductos) as TotalProductos
+FROM Modulo_Producto
+
+
+--A que modulo le corresponde cada proveedor
+Create View ModulosXProveedor
+as
+SELECT P.Empresa AS NombreProveedor, M.IdModulo AS NumeroModulo
+FROM ProveedorModulo PM
+JOIN Proveedor P ON PM.ProveedorId = P.IdProveedor
+JOIN Modulo M ON PM.ModuloId = M.IdModulo
+
+--cuantos modulos tiene cada proveedor
+Create View Get_CantModulosXProveedor
+as
+SELECT P.IdProveedor, P.Empresa, COUNT(*) AS TotalModulos
+FROM Proveedor P
+JOIN ProveedorModulo PM ON P.IdProveedor = PM.ProveedorId
+GROUP BY P.IdProveedor, P.Empresa
+
+--Seleccionar todos los teléfonos de los proveedores con su respectivo código de proveedor y país:
+Create View Get_TelProveedor_Codigo_Pais
+as
+SELECT TelefonoProveedorCodigo, PaisCodigo + ' ' + Numero_Movil AS Numero_Telefono, Proveedor_FK_Codigo FROM TelefonoProveedor
+
+--Seleccionar los teléfonos de los proveedores que están registrados en un país específico:
+Create View Get_TelProveedorXPais
+as
+SELECT TelefonoProveedorCodigo, PaisCodigo + ' ' + Numero_Movil AS Numero_Telefono, Proveedor_FK_Codigo FROM TelefonoProveedor
+WHERE PaisCodigo = '+505'
+
+--Seleccionar el proveedor y su número de teléfono principal (el primero que se registró):
+Create View Get_Proveedor_TelProveedor
+as
+SELECT P.IdProveedor, P.Empresa, TP.PaisCodigo + ' ' + TP.Numero_Movil AS Numero_Telefono FROM Proveedor P INNER JOIN TelefonoProveedor TP ON P.IdProveedor = TP.Proveedor_FK_Codigo WHERE TP.TelefonoProveedorCodigo = (SELECT MIN(TelefonoProveedorCodigo) FROM TelefonoProveedor WHERE Proveedor_FK_Codigo = P.IdProveedor)
+
+--Seleccionar los proveedores que no tienen número de teléfono registrado:
+Create View Get_Proveedores_SinNumero
+as
+SELECT P.IdProveedor, P.Empresa
+FROM Proveedor P
+LEFT JOIN TelefonoProveedor TP ON P.IdProveedor = TP.Proveedor_FK_Codigo
+WHERE TP.TelefonoProveedorCodigo IS NULL
+
+-- Este SELECT muestra únicamente los campos Empresa y CodigoProveedor de la tabla Proveedor, para aquellos proveedores cuyo Estado es igual a 1.
+Create View Get_Empresa_CodigoProveedor
+as
+SELECT Empresa, CodigoProveedor FROM Proveedor WHERE Estado = 1;
+
+-- Este SELECT muestra los campos IdProveedor, Empresa y Direccion de la tabla Proveedor, para aquellos proveedores cuyo CodigoProveedor contiene la cadena de caracteres 'ABC'.
+Create View Get_Proveedor_Empresa_Direccion_SiCodigoProveedor_Tiene_ABC
+as
+SELECT IdProveedor, Empresa, Direccion FROM Proveedor WHERE CodigoProveedor LIKE '%ABC%';
+
+-- Este SELECT muestra la cantidad de proveedores activos (Estado = 1) en la tabla Proveedor.
+Create View Get_Cant_Proveedor_Activos
+as
+SELECT COUNT(*) AS Cantidad_Proveedores_Activos FROM Proveedor WHERE Estado = 1;
+
+--Seleccionar todos los módulos con su información completa:
+Create View Get_Modulos_InfoCompleta
+as
+SELECT IdModulo, CapacidadModulo, StockModulo, Precio, Estado FROM Modulo
+
+--Seleccionar los módulos que tienen un stock menor a cierta cantidad:
+Create View Get_Modulos_Con_StockMenorA10
+as
+SELECT IdModulo, CapacidadModulo, StockModulo, Precio, Estado FROM Modulo WHERE StockModulo < 10
+
+--Seleccionar el precio promedio de los módulos:
+Create View Get_Precio_PromedioXModulo
+as
+SELECT AVG(Precio) AS Precio_Promedio FROM Modulo
+
+--Seleccionar el precio promedio de los módulos:
+Create View Get_Precio_PromedioXModulo
+as
+SELECT AVG(Precio) AS Precio_Promedio FROM Modulo
+
+--Seleccionar el IdAgencia y el Nombre de las agencias de envío activas (Estado = 1):
+Create View Get_Agencia_activas
+as
+SELECT IdAgencia, Nombre FROM AgenciaEnvios WHERE Estado = 1
+
+--Seleccionar la cantidad de agencias de envío registradas en la tabla:
+Create View Cant_AgenciaEnvios
+as
+SELECT COUNT(*) AS CantidadAgencias FROM AgenciaEnvios

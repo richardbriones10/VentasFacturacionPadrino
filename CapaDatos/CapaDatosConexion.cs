@@ -5,7 +5,9 @@ namespace CapaDatos
 {
     public class CapaDatosConexion
     {
-        private SqlConnection Conexion = new SqlConnection("Server=RICHARD-PC;DataBase= VentasFacturacionPadrino;Integrated Security=true");
+        private SqlConnection Conexion = new SqlConnection("Server=MARVIN;DataBase= VentasFacturacionPadrino;Integrated Security=true");
+
+        private string conn;
 
         public SqlConnection AbrirConexion()
         {
@@ -18,6 +20,12 @@ namespace CapaDatos
             if (Conexion.State == ConnectionState.Open)
                 Conexion.Close();
             return Conexion;
+        }
+
+        public string getConexion()
+        {
+            this.conn = Conexion.ConnectionString;
+            return this.conn;
         }
     }
 }

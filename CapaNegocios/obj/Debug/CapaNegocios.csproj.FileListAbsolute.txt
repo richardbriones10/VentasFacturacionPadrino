@@ -27,5 +27,19 @@ C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\obj\Debug\CapaNegocios.cspr
 C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\obj\Debug\CapaNegocios.csproj.CopyComplete
 C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\obj\Debug\CapaNegocios.dll
 C:\Users\fernando\Documents\ProyectoABD\CapaNegocios\obj\Debug\CapaNegocios.pdb
+<<<<<<< HEAD
+C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaNegocios\obj\Debug\CapaNegocios.csproj.AssemblyReference.cache
+C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaNegocios\obj\Debug\CapaNegocios.csproj.CoreCompileInputs.cache
+C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaNegocios\obj\Debug\CapaNegocios.dll
+C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaNegocios\obj\Debug\CapaNegocios.pdb
+C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaNegocios\bin\Debug\CapaNegocios.dll
+C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaNegocios\bin\Debug\CapaNegocios.pdb
+C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaNegocios\bin\Debug\CapaDatos.dll
+C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaNegocios\bin\Debug\CapaEntidad.dll
+C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaNegocios\bin\Debug\CapaDatos.pdb
+C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaNegocios\bin\Debug\CapaEntidad.pdb
+C:\Users\marvi\OneDrive\Documentos\4to_año\admo\ProyectoIlPadrinoConceptStore\VentasFacturacionPadrino\CapaNegocios\obj\Debug\CapaNegocios.csproj.CopyComplete
+=======
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaNegocios\bin\Debug\CapaEntidad.dll
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\CapaNegocios\bin\Debug\CapaEntidad.pdb
+>>>>>>> 33aab6c4224288cc7e991493f8e902e7a8fdf8d1
