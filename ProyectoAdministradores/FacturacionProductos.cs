@@ -329,7 +329,7 @@ namespace ProyectoAdministradores
 
         private void ImprimirFac()
         {
-            FormReporteFacturacionProductos frm = new FormReporteFacturacionProductos();
+            FormFacturacionProductos frm = new FormFacturacionProductos();
             frm.ShowDialog();
         }
 

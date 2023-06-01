@@ -1,4 +1,6 @@
 
+
+
 CREATE DATABASE VentasFacturacionPadrino
 use VentasFacturacionPadrino
 
@@ -183,10 +185,7 @@ FROM ProveedorModulo PM
 JOIN Proveedor P ON PM.ProveedorId = P.IdProveedor
 JOIN Modulo M ON PM.ModuloId = M.IdModulo
 --cuantos modulos tiene cada proveedor
-SELECT P.IdProveedor, P.Empresa, COUNT(*) AS TotalModulos
-FROM Proveedor P
-JOIN ProveedorModulo PM ON P.IdProveedor = PM.ProveedorId
-GROUP BY P.IdProveedor, P.Empresa
+0
 
 
 SELECT *
@@ -236,6 +235,23 @@ SELECT * FROM Proveedor
 SELECT * FROM Modulo
 SELECT * FROM Factura_Alquiler
 
+go
+alter PROCEDURE ObtenerUltimaFacturaAlquiler
+AS
+BEGIN
+    SELECT TOP 1 FA.CodigoFacturaAlquiler,P.Empresa AS NombreProveedor,
+        FA.Modulo_FK_Codigo AS IdModulo,
+        DATEDIFF(MONTH, FA.FechaCancelacion, FA.FechaExpiracion) AS NumeroMeses,
+        FA.FechaCancelacion AS FechaInicio,
+        FA.FechaExpiracion AS FechaExpiracion,
+		Modulo.Precio as ModuloPrecio,
+        FA.MontoTotal AS MontoFacturado
+    FROM Factura_Alquiler FA
+    INNER JOIN Proveedor P ON P.IdProveedor = FA.Proveedor_FK_Codigo, Modulo 
+	INNER JOIN Factura_Alquiler on Modulo.IdModulo = Factura_Alquiler.Modulo_FK_Codigo
+    ORDER BY FA.CodigoFacturaAlquiler DESC;
+END;
+
 
 INSERT INTO Factura_Alquiler (FechaCancelacion, FechaExpiracion, Proveedor_FK_Codigo, Modulo_FK_Codigo, MontoTotal)
 VALUES
@@ -264,21 +280,38 @@ VALUES
 (GETDATE(), DATEADD(month, 1, GETDATE()),1,2,50)
 delete from Factura_Alquiler where CodigoFacturaAlquiler=16
 
-GO
-Create Procedure InsertarFacturaModulos
-@IdProveedor int,
-@IdModulo int,
-@MontoModulo int
+
+
+go
+CREATE PROCEDURE InsertarFacturaModulos
+    @IdProveedor INT,
+    @IdModulo INT,
+    @NumeroDeMeses INT
 AS
 BEGIN
-INSERT INTO Factura_Alquiler (FechaCancelacion, FechaExpiracion, Mora, MontoTotal, Proveedor_FK_Codigo, Modulo_FK_Codigo)
-VALUES (GETDATE(), DATEADD(month, 1, GETDATE()), 0,@MontoModulo , @IdProveedor, @IdModulo)
-UPDATE ProveedorModulo
-SET ProveedorId = @IdProveedor
-WHERE ModuloId = @IdModulo
+    DECLARE @PrecioModulo FLOAT;
+    DECLARE @MontoModulo FLOAT
+
+    -- Obtener el precio del módulo
+    SELECT @PrecioModulo = Precio
+    FROM Modulo
+    WHERE IdModulo = @IdModulo;
+
+    -- Calcular el monto del módulo
+    SET @MontoModulo = @NumeroDeMeses * @PrecioModulo;
+
+    -- Insertar la factura de alquiler
+    INSERT INTO Factura_Alquiler (FechaCancelacion, FechaExpiracion, Mora, MontoTotal, Proveedor_FK_Codigo, Modulo_FK_Codigo)
+    VALUES (GETDATE(), DATEADD(MONTH, @NumeroDeMeses, GETDATE()), 0, @MontoModulo, @IdProveedor, @IdModulo);
+
+    -- Actualizar el proveedor del módulo
+    UPDATE ProveedorModulo
+    SET ProveedorId = @IdProveedor
+    WHERE ModuloId = @IdModulo;
 END
 
-execute InsertarFacturaModulos 2,1,50
+EXECUTE InsertarFacturaModulos 1,3,3
+
 
 
 CREATE TABLE CategoriaProducto
@@ -638,6 +671,14 @@ begin
 SELECT MAX(NumeroFactura) + 1 AS SiguienteFactura
 FROM Factura_Productos;
 end
+--Siguiente factura modulo
+go
+Create Procedure SiguienteFacturaModulo
+as
+begin
+SELECT MAX(Factura_Alquiler.CodigoFacturaAlquiler) + 1 AS SiguienteFactura
+FROM Factura_Alquiler;
+end
 --Factura actual
 SELECT TOP 1 * FROM Factura_Productos ORDER BY NumeroFactura DESC
 
@@ -719,8 +760,9 @@ begin
 	INSERT INTO Detalle_FacturaProducto (Cantidad_Producto_Vendida, SubTotal_Compra, Factura_FK_Numero, Producto_FK_ID)
 	VALUES (@CantidadProducto, @Subtotal, @NumeroFactura, @ProductoId);
 END
+execute InsertarFacturaProductoDetalle 1,1,50,1
 
-select * from Producto
+select * from Producto where IdProducto=1
 
 
 INSERT INTO Factura_Productos (TotalProductos, Monto_Total, Fecha_Compra, EsDomicilio, Cliente_FK_Cedula)
@@ -1624,11 +1666,11 @@ return
 			)
 	) as TablaDerivada
 )
-go
+
 
 
 --Función para ver todos los productos de un proveedor
-
+GO
 CREATE Function [dbo].[Get_ProductosXProveedor]
 (@CodigoProveedor nvarchar(30))
 returns table
@@ -1648,6 +1690,724 @@ return
 
 
 
+GO
+--Triggers - Richard
+--Visualizar los trigger existentes en la base de datos
+SELECT
+    name AS TriggerName,
+    OBJECT_NAME(parent_id) AS TableName,
+    create_date AS CreatedDate,
+    modify_date AS LastModifiedDate
+FROM sys.triggers;
+
+
+-- validar si los datos que se están actualizando o insertando en la tabla "Cliente" son del tipo correcto
+GO
+CREATE TRIGGER ValidarTipoDatosCliente
+ON Cliente
+FOR INSERT, UPDATE
+AS
+BEGIN
+  -- Verificar si los datos cumplen con los tipos correctos
+  IF EXISTS (
+    SELECT *
+    FROM inserted
+    WHERE
+      (Cedula IS NOT NULL AND ISNUMERIC(Cedula) = 0) OR
+      (Nombre IS NOT NULL AND LEN(Nombre) > 30) OR
+      (Telefono IS NOT NULL AND LEN(Telefono) > 16)
+  )
+  BEGIN
+    -- Al menos uno de los datos no cumple con los tipos correctos
+    RAISERROR ('Los datos ingresados no tienen el tipo correcto.', 16, 1);
+    ROLLBACK;
+  END;
+END;
+
+
+GO
+-- validar si los datos que se están actualizando o insertando en la tabla "Proveedor" son del tipo correcto
+CREATE TRIGGER ValidarTipoDatosProveedor
+ON Proveedor
+FOR INSERT, UPDATE
+AS
+BEGIN
+  -- Verificar si los datos cumplen con los tipos correctos
+  IF EXISTS (
+    SELECT *
+    FROM inserted
+    WHERE
+      (CodigoProveedor IS NOT NULL AND LEN(CodigoProveedor) > 20) OR
+      (Empresa IS NOT NULL AND LEN(Empresa) > 30)
+  )
+  BEGIN
+    -- Al menos uno de los datos no cumple con los tipos correctos
+    RAISERROR ('Los datos ingresados no tienen el tipo correcto.', 16, 1);
+    ROLLBACK;
+  END;
+END;
+
+
+go
+-- validar si los datos que se están actualizando o insertando en la tabla "TelefonoProveedor" son del tipo correcto
+CREATE TRIGGER ValidarTipoDatosTelefonoProveedor
+ON TelefonoProveedor
+FOR INSERT, UPDATE
+AS
+BEGIN
+  -- Verificar si los datos cumplen con los tipos correctos
+  IF EXISTS (
+    SELECT *
+    FROM inserted
+    WHERE
+      (PaisCodigo IS NOT NULL AND LEN(PaisCodigo) > 4) OR
+      (Numero_Movil IS NOT NULL AND LEN(Numero_Movil) > 8)
+  )
+  BEGIN
+    -- Al menos uno de los datos no cumple con los tipos correctos
+    RAISERROR ('Los datos ingresados no tienen el tipo correcto.', 16, 1);
+    ROLLBACK;
+  END;
+END;
+
+-- validar si los datos que se están actualizando o insertando en la tabla "Modulo" son del tipo correcto
+go
+CREATE TRIGGER ValidarTipoDatosModulo
+ON Modulo
+FOR INSERT, UPDATE
+AS
+BEGIN
+  -- Verificar si los datos cumplen con los tipos correctos
+  IF EXISTS (
+    SELECT *
+    FROM inserted
+    WHERE
+      (CapacidadModulo IS NOT NULL AND CapacidadModulo <= 0) OR
+      (StockModulo IS NOT NULL AND StockModulo < 0)
+  )
+  BEGIN
+    -- Al menos uno de los datos no cumple con los tipos correctos
+    RAISERROR ('Los datos ingresados no tienen el tipo correcto.', 16, 1);
+    ROLLBACK;
+  END;
+END;
+
+go
+-- validar si los datos que se están actualizando o insertando en la tabla "FacturaAlquiler" son del tipo correcto
+CREATE TRIGGER ValidarTipoDatosFacturaAlquiler
+ON Factura_Alquiler
+FOR INSERT, UPDATE
+AS
+BEGIN
+  -- Verificar si los datos cumplen con los tipos correctos
+  IF EXISTS (
+    SELECT *
+    FROM inserted
+    WHERE
+      (FechaCancelacion IS NOT NULL AND TRY_CONVERT(DATE, FechaCancelacion) IS NULL) OR
+      (FechaExpiracion IS NOT NULL AND TRY_CONVERT(DATE, FechaExpiracion) IS NULL) OR
+      (Mora IS NOT NULL AND Mora < 0)
+  )
+  BEGIN
+    -- Al menos uno de los datos no cumple con los tipos correctos
+    RAISERROR ('Los datos ingresados no tienen el tipo correcto.', 16, 1);
+    ROLLBACK;
+  END;
+END;
+
+
+
+GO
+CREATE TRIGGER ValidarTipoDatosCategoriaProducto
+ON CategoriaProducto
+FOR INSERT, UPDATE
+AS
+BEGIN
+  -- Verificar si los datos cumplen con los tipos correctos
+  IF EXISTS (
+    SELECT *
+    FROM inserted
+    WHERE
+      (Nombre IS NOT NULL AND LEN(Nombre) > 20)
+  )
+  BEGIN
+    -- Al menos uno de los datos no cumple con los tipos correctos
+    RAISERROR ('Los datos ingresados no tienen el tipo correcto.', 16, 1);
+    ROLLBACK;
+  END;
+END;
+
+go
+-- Crear el trigger para Producto
+CREATE TRIGGER ValidarTipoDatosProducto
+ON Producto
+FOR INSERT, UPDATE
+AS
+BEGIN
+  -- Verificar si los datos cumplen con los tipos correctos
+  IF EXISTS (
+    SELECT *
+    FROM inserted
+    WHERE
+      (Nombre IS NOT NULL AND LEN(Nombre) > 20) OR
+      (StockActual IS NOT NULL AND StockActual < 0) OR
+      (Precio IS NOT NULL AND Precio < 0) OR
+      (Descripcion IS NOT NULL AND LEN(Descripcion) = 0) OR
+      (Proveedor_FK_Codigo IS NULL) OR
+      (Categoria_FK_Codigo IS NULL)
+  )
+  BEGIN
+    -- Al menos uno de los datos no cumple con los tipos correctos
+    RAISERROR ('Los datos ingresados no tienen el tipo correcto.', 16, 1);
+    ROLLBACK;
+  END;
+END;
+
+
+--Trigger que dada una insercion en la tabla de registro, agregue automaticamente la cantidad suministrada al stock del producto
+-- Crear el trigger para RegistroProducto
+go
+CREATE TRIGGER ActualizarStockProducto
+ON RegistroProducto
+AFTER INSERT
+AS
+BEGIN
+  -- Actualizar el stock del producto
+  UPDATE Producto
+  SET StockActual = StockActual + i.CantidadSuministrada
+  FROM Producto
+  INNER JOIN inserted i ON Producto.IdProducto = i.Producto_FK_Coidgo;
+END;
+
+
+Select * from RegistroProducto
+Insert into RegistroProducto values(50,getdate(),19)
+Select * from Producto where Nombre='Juego de Mesa'
+
+--valida los datos de entrada d factura productos
+go
+-- Crear el trigger para Factura_Productos
+CREATE TRIGGER ValidarDatosFacturaProductos
+ON Factura_Productos for INSERT
+AS
+BEGIN
+  -- Verificar si los datos cumplen con los requisitos de validación
+  IF EXISTS (
+    SELECT *
+    FROM inserted
+    WHERE
+      (TotalProductos IS NULL OR TotalProductos <= 0) OR
+      (Monto_Total IS NULL OR Monto_Total <= 0) OR
+      (Fecha_Compra IS NULL) OR
+      (Cliente_FK_Cedula IS NULL)
+  )
+  BEGIN
+    -- Al menos uno de los datos no cumple con los requisitos de validación
+    RAISERROR ('Los datos ingresados en la tabla Factura_Productos no cumplen con los requisitos de validación.', 16, 1);
+    ROLLBACK;
+  END;
+END;
+
+
+--Trigger que resta el stock de Producto al momento de hacer una insercion en la tabla detalle factura productos
+-- Crear el trigger para Detalle_FacturaProducto
+go
+CREATE TRIGGER RestarCantidadProductoStock
+ON Detalle_FacturaProducto
+AFTER INSERT
+AS
+BEGIN
+  -- Variables
+  DECLARE @ProductoID INT, @CantidadVendida INT, @StockActual INT;
+
+  -- Obtener los datos del registro insertado
+  SELECT @ProductoID = i.Producto_FK_ID, @CantidadVendida = i.Cantidad_Producto_Vendida
+  FROM inserted i;
+
+  -- Verificar si hay suficiente stock disponible
+  SELECT @StockActual = StockActual
+  FROM Producto
+  WHERE IdProducto = @ProductoID;
+
+  IF @CantidadVendida > @StockActual
+  BEGIN
+    -- No hay suficiente stock disponible, generar error
+    RAISERROR ('No hay suficiente stock disponible para restar la cantidad vendida en el producto.', 16, 1);
+    ROLLBACK;
+    RETURN;
+  END;
+
+  -- Actualizar el stock de los productos
+  UPDATE Producto
+  SET StockActual = StockActual - @CantidadVendida
+  WHERE IdProducto = @ProductoID;
+END;
+
+--DESACTIVAR ALL TRIGGERS
+-- Desactivar todos los triggers en la base de datos
+go
+alter PROCEDURE DesactivarTriggers
+AS
+BEGIN
+    -- Desactivar todos los triggers en la base de datos
+    DECLARE @disableTriggerSql NVARCHAR(MAX) = N'';
+
+    SELECT @disableTriggerSql += N'DISABLE TRIGGER ' + QUOTENAME(name) + ';' + CHAR(13)
+    FROM sys.triggers;
+
+    EXEC sp_executesql @disableTriggerSql;
+END;
+
+execute DesactivarTriggers
+
+--Activar todos
+
+-- Activar todos los triggers en la base de datos
+DECLARE @enableTriggerSql NVARCHAR(MAX) = N''
+
+SELECT @enableTriggerSql += N'ENABLE TRIGGER ' + QUOTENAME(name) + ';' + CHAR(13)
+FROM sys.triggers;
+
+EXEC sp_executesql @enableTriggerSql;
+
+
+
+--Funciones Richard
+--Funcion para obtener el precio promedio de los productos
+GO
+CREATE FUNCTION SumaPrecioProductos()
+RETURNS FLOAT
+AS
+BEGIN
+	DECLARE @Suma FLOAT;
+	SELECT @Suma = SUM(Precio) from Producto
+	RETURN @Suma
+END
+
+SELECT dbo.SumaPrecioProductos() as 'Suma del precio de los productos'
+
+
+GO
+CREATE FUNCTION obtenerPrecioPromedio()
+RETURNS FLOAT
+AS
+BEGIN
+    DECLARE @promedio FLOAT;
+    SELECT @promedio =  AVG(Precio) FROM Producto;
+    RETURN @promedio;
+END;
+
+SELECT ROUND(dbo.obtenerPrecioPromedio(),2) as 'Precio Promedio de los Productos'
+
+--Descripcion del Producto
+GO
+--Por ID
+CREATE FUNCTION obtenerDescripcionProducto(@idProducto INT)
+RETURNS NVARCHAR(MAX)
+AS
+BEGIN
+    DECLARE @descripcion NVARCHAR(MAX);
+    SELECT @descripcion = Descripcion FROM Producto WHERE IdProducto = @idProducto;
+    RETURN @descripcion;
+END;
+
+SELECT dbo.obtenerDescripcionProducto(2) AS 'Descripcion del Producto'
+
+
+--Por Nombre
+GO
+CREATE FUNCTION obtenerDescripcionProductoPorNombre(@nombreProducto NVARCHAR(20))
+RETURNS NVARCHAR(MAX)
+AS
+BEGIN
+    DECLARE @descripcion NVARCHAR(MAX);
+    SELECT @descripcion = Descripcion FROM Producto WHERE Nombre = @nombreProducto;
+    RETURN @descripcion;
+END;
+
+SELECT dbo.obtenerDescripcionProductoPorNombre('Juego de Mesa') AS 'Descripcion del Producto'
+
+
+
+
+
+--Vistas y Funciones -- Fernando
+-- View Obtener la cantidad de productos y el nombre del módulo que están asignados
+GO
+Create view ProductosXModulos
+as
+SELECT CantidadProductos, m.IdModulo as Modulo, p.Nombre as Producto
+FROM Modulo_Producto mp
+JOIN Modulo m ON mp.Modulo_FK_Codigo = m.IdModulo
+JOIN Producto p ON mp.Producto_FK_Codigo = p.IdProducto
+
+--Obtener la cantidad de productos asignados a cada módulo:
+go
+create View Get_CantidadProductosPorModulo
+as
+SELECT Modulo_FK_Codigo, SUM(CantidadProductos) as TotalProductos
+FROM Modulo_Producto
+GROUP BY Modulo_FK_Codigo
+
+--Obtener el nombre del producto y la cantidad de productos asignados a cada módulo:
+go
+Create View Get_nombreProducto_CantidadProductoPorModulo
+as
+SELECT p.Nombre as Producto, mp.CantidadProductos, m.IdModulo as Modulo
+FROM Modulo_Producto mp
+JOIN Modulo m ON mp.Modulo_FK_Codigo = m.IdModulo
+JOIN Producto p ON mp.Producto_FK_Codigo = p.IdProducto
+
+--Obtener la cantidad total de productos asignados a todos los módulos:
+go
+create view get_CantidadTotalProductosPorModulo
+as
+SELECT SUM(CantidadProductos) as TotalProductos
+FROM Modulo_Producto
+
+--A que modulo le corresponde cada proveedor
+go
+Create View ModulosXProveedor
+as
+SELECT P.Empresa AS NombreProveedor, M.IdModulo AS NumeroModulo
+FROM ProveedorModulo PM
+JOIN Proveedor P ON PM.ProveedorId = P.IdProveedor
+JOIN Modulo M ON PM.ModuloId = M.IdModulo
+
+
+
+--cuantos modulos tiene cada proveedor
+go
+Create View Get_CantModulosXProveedor
+as
+SELECT P.IdProveedor, P.Empresa, COUNT(*) AS TotalModulos
+FROM Proveedor P
+JOIN ProveedorModulo PM ON P.IdProveedor = PM.ProveedorId
+GROUP BY P.IdProveedor, P.Empresa
+
+go
+--Seleccionar todos los teléfonos de los proveedores con su respectivo código de proveedor y país:
+
+Create View Get_TelProveedor_Codigo_Pais
+as
+SELECT TelefonoProveedorCodigo, PaisCodigo + ' ' + Numero_Movil AS Numero_Telefono, Proveedor_FK_Codigo FROM TelefonoProveedor
+
+go
+--Seleccionar los teléfonos de los proveedores que están registrados en un país específico:
+Create View Get_TelProveedorXPais
+as
+SELECT TelefonoProveedorCodigo, PaisCodigo + ' ' + Numero_Movil AS Numero_Telefono, Proveedor_FK_Codigo FROM TelefonoProveedor
+WHERE PaisCodigo = '+505'
+
+go
+--Seleccionar el proveedor y su número de teléfono principal (el primero que se registró):
+Create View Get_Proveedor_TelProveedor
+as
+SELECT P.IdProveedor, P.Empresa, TP.PaisCodigo + ' ' + TP.Numero_Movil AS Numero_Telefono FROM Proveedor P INNER JOIN TelefonoProveedor TP ON P.IdProveedor = TP.Proveedor_FK_Codigo WHERE TP.TelefonoProveedorCodigo = (SELECT MIN(TelefonoProveedorCodigo) FROM TelefonoProveedor WHERE Proveedor_FK_Codigo = P.IdProveedor)
+
+go
+--Seleccionar los proveedores que no tienen número de teléfono registrado:
+Create View Get_Proveedores_SinNumero
+as
+SELECT P.IdProveedor, P.Empresa
+FROM Proveedor P
+LEFT JOIN TelefonoProveedor TP ON P.IdProveedor = TP.Proveedor_FK_Codigo
+WHERE TP.TelefonoProveedorCodigo IS NULL
+
+go
+-- Este SELECT muestra únicamente los campos Empresa y CodigoProveedor de la tabla Proveedor, para aquellos proveedores cuyo Estado es igual a 1.
+Create View Get_Empresa_CodigoProveedor
+as
+SELECT Empresa, CodigoProveedor FROM Proveedor WHERE Estado = 1;
+
+go
+-- Este SELECT muestra los campos IdProveedor, Empresa y Direccion de la tabla Proveedor, para aquellos proveedores cuyo CodigoProveedor contiene la cadena de caracteres 'ABC'.
+Create View Get_Proveedor_Empresa_Direccion_SiCodigoProveedor_Tiene_ABC
+as
+SELECT IdProveedor, Empresa, Direccion FROM Proveedor WHERE CodigoProveedor LIKE '%ABC%';
+go
+-- Este SELECT muestra la cantidad de proveedores activos (Estado = 1) en la tabla Proveedor.
+Create View Get_Cant_Proveedor_Activos
+as
+SELECT COUNT(*) AS Cantidad_Proveedores_Activos FROM Proveedor WHERE Estado = 1;
+
+go
+--Seleccionar todos los módulos con su información completa:
+Create View Get_Modulos_InfoCompleta
+as
+SELECT IdModulo, CapacidadModulo, StockModulo, Precio, Estado FROM Modulo
+go
+--Seleccionar los módulos que tienen un stock menor a cierta cantidad:
+Create View Get_Modulos_Con_StockMenorA10
+as
+SELECT IdModulo, CapacidadModulo, StockModulo, Precio, Estado FROM Modulo WHERE StockModulo < 10
+go
+--Seleccionar el precio promedio de los módulos:
+Create View Get_Precio_PromedioXModulo
+as
+SELECT AVG(Precio) AS Precio_Promedio FROM Modulo
+go
+--Seleccionar el precio promedio de los módulos:
+Create View Get_Precio_PromedioXModulo
+as
+SELECT AVG(Precio) AS Precio_Promedio FROM Modulo
+go
+--Seleccionar el IdAgencia y el Nombre de las agencias de envío activas (Estado = 1):
+Create View Get_Agencia_activas
+as
+SELECT IdAgencia, Nombre FROM AgenciaEnvios WHERE Estado = 1
+go
+--Seleccionar la cantidad de agencias de envío registradas en la tabla:
+Create View Cant_AgenciaEnvios
+as
+SELECT COUNT(*) AS CantidadAgencias FROM AgenciaEnvios
+go
+Create View view_Factura_Modulos_Avencer
+as
+SELECT *
+FROM Factura_Alquiler
+WHERE FechaExpiracion >= GETDATE()
+go
+
+
+
+--Funciones Fernando
+--Seleccionar los teléfonos de los proveedores que están registrados en un país específico:
+CREATE FUNCTION Select_telefono_pais_especifico
+(	
+	@CodigoPais nvarchar(20)
+)
+RETURNS TABLE 
+AS
+RETURN 
+(
+	
+	SELECT TelefonoProveedorCodigo, PaisCodigo + ' ' + Numero_Movil AS Numero_Telefono, Proveedor_FK_Codigo FROM TelefonoProveedor
+	WHERE PaisCodigo = @CodigoPais
+
+)
+go
+--Seleccionar los módulos que tienen un stock menor a cierta cantidad:
+Create Function ModulosQueTienenStockMenorAX
+(@Cantidad float)
+returns table
+return(
+	SELECT IdModulo, CapacidadModulo, StockModulo, Precio, Estado FROM Modulo WHERE StockModulo < @Cantidad
+	
+)
+go
+
+
+
+--Seleccionar los módulos con stock disponible, es decir, que su stock es mayor que cero:
+Create Function ModulosQueTienenStockMayorACero
+()
+returns table
+return
+(
+	SELECT IdModulo, CapacidadModulo, StockModulo, Precio, Estado FROM Modulo WHERE StockModulo > 0
+
+)
+go
+--A que modulo le corresponde cada proveedor
+create function fun_ModulosXProveedor
+()
+returns table
+return(
+ 
+SELECT P.Empresa AS NombreProveedor, M.IdModulo AS NumeroModulo
+FROM ProveedorModulo PM
+JOIN Proveedor P ON PM.ProveedorId = P.IdProveedor
+JOIN Modulo M ON PM.ModuloId = M.IdModulo
+
+)
+go
+--Seleccionar el ID y nombre de todas las categorías cuyo nombre contiene la palabra "abcde":
+Create function fun_Categorias_segun_Palabras
+(@Palabra nvarchar(30))
+returns table
+return
+(
+SELECT IdCategoria, Nombre FROM CategoriaProducto WHERE Nombre LIKE '%'+@Palabra+'%'
+)
+go
+--Seleccionar todos los productos con su nombre, precio, y la categoría a la que pertenecen:
+create function fun_Info_Productos
+()
+returns table
+return
+(
+
+SELECT p.Nombre AS 'Nombre del producto', p.Precio AS 'Precio del producto', c.Nombre AS 'Categoría'
+FROM Producto p INNER JOIN CategoriaProducto c ON p.Categoria_FK_Codigo = c.IdCategoria
+)
+go
+--Seleccionar los productos que tienen un precio mayor a $10:
+create function fun_Productos_con_precio_mayorAX
+(@precio float)
+returns table
+return
+(
+SELECT Nombre AS 'Nombre del producto', Precio AS 'Precio del producto' FROM Producto WHERE Precio > @precio
+)
+go
+--Seleccionar los productos que tienen un stock actual menor a 10:
+create function fun_Productos_con_stock_menorAX
+(@stock int)
+returns table
+return
+(
+SELECT Nombre AS 'Nombre del producto', StockActual AS 'Stock actual' FROM Producto WHERE StockActual < @stock
+)
+go
+--Seleccionar los productos que pertenecen a una categoria:
+create function fun_ProductosXCategoria
+(@Categoria nvarchar(50))
+returns table
+return
+(
+
+SELECT Producto.Nombre AS 'Nombre del producto', Precio AS 'Precio del producto' FROM Producto
+INNER JOIN CategoriaProducto ON Producto.Categoria_FK_Codigo = CategoriaProducto.IdCategoria
+WHERE CategoriaProducto.Nombre = @Categoria
+)
+go
+--Seleccionar los productos con su nombre y su proveedor:
+CREATE FUNCTION fun_ProductosXProveedor
+()
+returns table
+return
+(
+SELECT Nombre AS 'Nombre del producto', Proveedor.Empresa AS 'Proveedor'
+FROM Producto INNER JOIN Proveedor ON Producto.Proveedor_FK_Codigo = Proveedor.IdProveedor
+)
+go
+
+
+--Seleccionar los registros de la tabla con la fecha de suministro igual a '2023-05-04':
+Create Function fun_SuministrosXFecha
+(@fecha datetime)
+returns table
+return
+(
+SELECT *
+FROM RegistroProducto
+WHERE FechaSuministrada = @fecha
+)
+go
+Create function fun_Facturas_Alquiler_Avencer
+()
+returns table
+return
+(
+SELECT *
+FROM Factura_Alquiler
+WHERE FechaExpiracion >= GETDATE()
+
+)
+go
+
+-- Funciones escalares
+
+--Seleccionar el precio promedio de los módulos:
+Create Function AVG_Precio_Modulos
+()
+returns float
+as
+begin
+	return (SELECT AVG(Precio) AS Precio_Promedio FROM Modulo)
+end
+
+go
+--Seleccionar el número total de registros en la tabla:
+Create Function fun_Cant_RegistrosProducto
+()
+returns int
+as
+begin
+	return (SELECT COUNT(*) AS TotalRegistros FROM RegistroProducto)
+end
+go
+--Seleccionar la cantidad promedio de productos suministrados por registro:
+Create function fun_Cant_Promedio_RegistroProducto
+()
+returns float
+as
+begin
+	return (SELECT AVG(CantidadSuministrada) AS PromedioCantidad
+			FROM RegistroProducto
+			)
+end
+
+go
+
+--Siguiente factura
+Create Function  fun_SiguienteFacturaId
+()
+returns int
+as
+begin
+return (SELECT MAX(NumeroFactura) + 1 AS SiguienteFactura
+FROM Factura_Productos)
+end
+
+go
+-- Funcion que retorna el total de ventas del mes actual
+CREATE function fun_TotalVentasMesActual
+()
+returns int
+AS
+BEGIN
+return (SELECT COUNT(*) AS 'TotalVentas'
+    FROM Factura_Productos
+    WHERE MONTH(Fecha_Compra) = MONTH(GETDATE()) AND YEAR(Fecha_Compra) = YEAR(GETDATE())
+	)
+END
+go
+-- funcion Obtener la cantidad total de productos asignados a todos los módulos:
+Create function fun_Get_Cant_Productos_AsignadoAlModulo
+()
+returns int
+as
+begin
+return(SELECT SUM(CantidadProductos) as TotalProductos
+FROM Modulo_Producto)
+end
+go
+
+Create function fun_Get_Cant_Productos_AsignadoAUNModulo
+( @IdModulo int)
+returns int
+as
+begin
+return(SELECT SUM(CantidadProductos) as TotalProductos
+FROM Modulo_Producto where IdModuloProducto = @IdModulo)
+end
+go
+--Seleccionar la cantidad de agencias de envío registradas en la tabla:
+Create function fun_Cant_Agencias
+()
+returns int
+as
+begin
+
+return
+(
+	
+SELECT COUNT(*) AS CantidadAgencias FROM AgenciaEnvios
+)
+
+end
+
+go
+-- Este SELECT muestra la cantidad de proveedores activos (Estado = 1) en la tabla Proveedor.
+create function fun_Cant_Proveedores_Activos
+()
+returns int
+as 
+begin
+return (SELECT COUNT(*) AS Cantidad_Proveedores_Activos FROM Proveedor WHERE Estado = 1)
+end
 
 
 

@@ -62,7 +62,6 @@ C:\Users\richa\Source\Repos\VentasFacturacionPadrino\ProyectoAdministradores\obj
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\CapaPresentacion.csproj.SuggestedBindingRedirects.cache
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.Dashboard.resources
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.FacturacionProductos.resources
-C:\Users\richa\Source\Repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.FormReporteFacturacionProductos.resources
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.Properties.Resources.resources
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.UI.resources
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\CapaPresentacion.csproj.GenerateResource.cache
@@ -74,3 +73,5 @@ C:\Users\richa\source\repos\VentasFacturacionPadrino\ProyectoAdministradores\bin
 C:\Users\richa\source\repos\VentasFacturacionPadrino\ProyectoAdministradores\bin\Debug\CapaEntidad.pdb
 C:\Users\richa\source\repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.ControlProductos.resources
 C:\Users\richa\Source\Repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.FacturacionModulos.resources
+C:\Users\richa\source\repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.RPT_FacturacionModulos.resources
+C:\Users\richa\source\repos\VentasFacturacionPadrino\ProyectoAdministradores\obj\Debug\ProyectoAdministradores.FormFacturacionProductos.resources
