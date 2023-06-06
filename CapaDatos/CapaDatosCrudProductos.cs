@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CapaEntidad;
 using System.Data.SqlClient;
-
+using System.Windows.Forms;
 
 namespace CapaDatos
 {
@@ -52,10 +52,30 @@ namespace CapaDatos
         public void InsertProduct(Producto producto)
         {
 
-            using(conexion.AbrirConexion())
+            try
             {
+                SqlCommand cmd = new SqlCommand("insert into Producto (Nombre, StockActual, Precio, Descripcion, Proveedor_FK_Codigo, Categoria_FK_Codigo)"+
+                    " values(@Nombre,@StockActual,@Precio,@Descripcion,@Proveedor_FK_Codigo,@Categoria_FK_Codigo )", conexion.AbrirConexion());
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.AddWithValue("@Nombre", producto.Nombre);
+                cmd.Parameters.AddWithValue("@StockActual", producto.StockActual);
+                cmd.Parameters.AddWithValue("@Precio", producto.Precio);
+                cmd.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
+                cmd.Parameters.AddWithValue("@Proveedor_FK_Codigo", producto.Proveedor_FK_Codigo);
+                cmd.Parameters.AddWithValue("@Categoria_FK_Codigo", producto.Categoria_FK_Codigo);
 
+                cmd.ExecuteNonQuery();
+            
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Error:"+  ex.Message);
+            }
+            finally
+            {
+                conexion.CerrarConexion();
+            }
+
         }
     }
 }

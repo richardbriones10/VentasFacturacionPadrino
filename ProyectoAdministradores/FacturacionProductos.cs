@@ -13,12 +13,7 @@ namespace ProyectoAdministradores
     public partial class FacturacionProductos : Form
     {
         //Conexion con la base de datos
-<<<<<<< HEAD
-        private SqlConnection Conexion = new SqlConnection("Server=MARVIN;DataBase=VentasFacturacionPadrino;Integrated Security=true");
-        DataTable datos = new DataTable();
-=======
         private SqlConnection Conexion = new SqlConnection("Server=RICHARD-PC;DataBase=VentasFacturacionPadrino;Integrated Security=true");
->>>>>>> 33aab6c4224288cc7e991493f8e902e7a8fdf8d1
         SqlCommand comando = new SqlCommand();
         public DataTable datos = new DataTable();
         private DataTable dt;
@@ -189,7 +184,7 @@ namespace ProyectoAdministradores
             if (e.KeyCode == Keys.Enter)
             {
                 // Aquí llamas al método que ejecuta la consulta a la base de datos
-                string connstring = "Server=MARVIN;DataBase= VentasFacturacionPadrino;Integrated Security=true";
+                string connstring = "Server=RICHARD-PC;DataBase= VentasFacturacionPadrino;Integrated Security=true";
                 using (SqlConnection cn = new SqlConnection(connstring))
                 {
                     cn.Open();
@@ -334,7 +329,7 @@ namespace ProyectoAdministradores
 
         private void ImprimirFac()
         {
-            FormFacturacionProductos frm = new FormFacturacionProductos();
+            FormReporteFacturacionProductos frm = new FormReporteFacturacionProductos();
             frm.ShowDialog();
         }
 

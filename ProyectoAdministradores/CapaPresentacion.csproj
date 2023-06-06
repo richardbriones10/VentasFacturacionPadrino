@@ -107,11 +107,11 @@
     <Compile Include="FacturacionProductos.Designer.cs">
       <DependentUpon>FacturacionProductos.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormFacturacionProductos.cs">
+    <Compile Include="FormReporteFacturacionProductos.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormFacturacionProductos.Designer.cs">
-      <DependentUpon>FormFacturacionProductos.cs</DependentUpon>
+    <Compile Include="FormReporteFacturacionProductos.Designer.cs">
+      <DependentUpon>FormReporteFacturacionProductos.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -127,23 +127,11 @@
     <Compile Include="RegistrosVentas.Designer.cs">
       <DependentUpon>RegistrosVentas.cs</DependentUpon>
     </Compile>
-    <Compile Include="ReporteFacturacionModulos.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ReporteFacturacionModulos.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="ReporteFacturacionProductos.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ReporteFacturacionProductos.rpt</DependentUpon>
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="RPT_FacturacionModulos.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="RPT_FacturacionModulos.Designer.cs">
-      <DependentUpon>RPT_FacturacionModulos.cs</DependentUpon>
     </Compile>
     <Compile Include="UI.cs">
       <SubType>Form</SubType>
@@ -166,8 +154,8 @@
     <EmbeddedResource Include="FacturacionProductos.resx">
       <DependentUpon>FacturacionProductos.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormFacturacionProductos.resx">
-      <DependentUpon>FormFacturacionProductos.cs</DependentUpon>
+    <EmbeddedResource Include="FormReporteFacturacionProductos.resx">
+      <DependentUpon>FormReporteFacturacionProductos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -179,16 +167,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="ReporteFacturacionModulos.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>ReporteFacturacionModulos.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="ReporteFacturacionProductos.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ReporteFacturacionProductos.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RPT_FacturacionModulos.resx">
-      <DependentUpon>RPT_FacturacionModulos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI.resx">
       <DependentUpon>UI.cs</DependentUpon>

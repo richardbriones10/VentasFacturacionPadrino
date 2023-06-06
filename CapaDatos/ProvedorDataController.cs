@@ -21,7 +21,7 @@ namespace CapaDatos
         private int IdProovedor;
 
 
-        public void setProovedorValues(string codigo, string empresa, string direccion)
+        protected void setProovedorValues(string codigo, string empresa, string direccion)
         {
             this.CodigoProovedor = codigo;
             this.NombreEmpresa = empresa;
@@ -29,7 +29,7 @@ namespace CapaDatos
             this.EstadoProovedor = 1;
         }
 
-        public void setProovedorValues(int id)
+        protected void setProovedorValues(int id)
         {
             this.IdProovedor = id;
         }
@@ -59,7 +59,7 @@ namespace CapaDatos
             return this.IdProovedor;
         }
         
-        public void InsertarProovedor()
+        protected void InsertarProovedor()
         {
             conexion.CerrarConexion();
             conexion.AbrirConexion();
@@ -74,7 +74,7 @@ namespace CapaDatos
             conexion.CerrarConexion();
         }
 
-        public void ActualizarProovedor()
+        protected void ActualizarProovedor()
         {
             conexion.CerrarConexion();
             conexion.AbrirConexion();
@@ -90,7 +90,7 @@ namespace CapaDatos
             conexion.CerrarConexion();
         }
 
-        public void EliminarProovedor()
+        protected void EliminarProovedor()
         {
             conexion.CerrarConexion();
             conexion.AbrirConexion();
@@ -101,43 +101,5 @@ namespace CapaDatos
             comando.Parameters.Clear();
             conexion.CerrarConexion();
         }
-
-        public bool proovedorExist(string codigo)
-        {
-
-            Boolean result = false;
-
-            using (SqlConnection cn = new SqlConnection(conexion.getConexion()))
-            {
-                cn.Open();
-                string sql = "SELECT IdProveedor FROM Proveedor WHERE CodigoProveedor = @CodigoProovedor";
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.Parameters.AddWithValue("@CodigoProovedor", codigo);
-                int selectResults = cmd.ExecuteNonQuery();
-                //SqlDataReader reader = cmd.ExecuteReader();
-
-                if (selectResults >= 1)
-                {
-                    result = true;
-                }
-
-                cn.Close();
-            }
-
-            return result;
-         }
-
-        public void ReadProovedor()
-        {
-            using (SqlConnection cn = new SqlConnection(conexion.getConexion()))
-            {
-                cn.Open();
-                string sql = "SELECT * FROM Proveedor";
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                SqlDataReader reader = cmd.ExecuteReader();
-                cn.Close();
-            }
-        }
-        
     }
 }
